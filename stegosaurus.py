@@ -348,7 +348,7 @@ def inject_debugger(indata,inp):
             in_func = False
         if in_func:
             if (line[1]=="?") or (line[1]=="for") or (line[1]=="while") or (line[1]=="if") or (line[1]=="try"):
-                ou.append([line[0],"?",["(STEGOSAURUSTRACEBACKDEBUGGER::steg_spot->line) = "+str(linenum+1)]])
+                ou.append([line[0],"?",["STEGOSAURUSTRACEBACKDEBUGGER::steg_spot = "+str(linenum+1)]])
             ou.append(line)
         else:
             if line[1]=="func":

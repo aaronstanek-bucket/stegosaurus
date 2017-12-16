@@ -1,0 +1,80 @@
+include
+  <cstdlib>
+  <iostream>
+  <vector>
+  <exception>
+  <csignal>
+
+namespace STEGOSAURUSTRACEBACKDEBUGGER
+
+  struct stack_data
+    const char * funcname
+    unsigned short ln
+    stack_data * prev
+
+  honly
+    stack_data * active_point
+    unsigned short steg_spot
+
+  class coin
+    public
+      bool one_byte_of_memory
+      func coin(const char * fn)
+        if active_point==NULL
+          active_point = new stack_data
+          active_point->prev = NULL
+          active_point->funcname = fn
+        else
+          active_point->ln = steg_spot
+          stack_data * sdp = new stack_data
+          sdp->prev = active_point
+          sdp->funcname = fn
+          active_point = sdp
+      func ~coin()
+        stack_data * sdp = active_point
+        active_point = active_point->prev
+        delete sdp
+        if active_point!=NULL
+          steg_spot = active_point->ln
+        else
+          steg_spot = 0
+
+  func void do_traceback()
+    if active_point!=NULL
+      (active_point->ln) = steg_spot
+    vector <stack_data*> sdv
+    stack_data * sdp = active_point
+    while true
+      if sdp==NULL
+        break
+      sdv.push_back(sdp)
+      sdp = sdp->prev
+    cout << "START STEGOSAURUS TRACEBACK DEBUGGER" << endl
+    while sdv.size()!=0
+      cout << sdv.back()->funcname << " : " << sdv.back()->ln << endl
+      sdv.pop_back()
+    cout << "END STEGOSAURUS TRACEBACK DEBUGGER" << endl
+
+  func void deal_with_exceptions()
+    do_traceback()
+    cout << "..." << endl
+    cout << "UNCAUGHT EXCEPTION"
+    exit(0)
+
+  func void deal_with_segfault(int nope)
+    do_traceback()
+    cout << "..." << endl
+    cout << "SEGFAULT" << endl
+    exit(0)
+
+  class setup_node
+    public
+      bool one_byte_of_memory
+      func setup_node()
+        active_point = NULL
+        steg_spot = 0
+        set_terminate(deal_with_exceptions)
+        signal(SIGSEGV,deal_with_segfault)
+
+  honly
+    setup_node mysetup
